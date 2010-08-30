@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<project name="FlashCookies" default="compile" basedir=".">
+  <property name="flex.mxmlc" location="/opt/flex/bin/mxmlc" />
+  <property name="dest.dir" value="../swfs" />
+  <property name="src.dir" value="src" />
+  <target name="init">
+    <delete dir="${dest.dir}" />
+    <mkdir dir="${dest.dir}" />
+  </target>
+  <target name="compile" depends="init">
+    <exec executable="${flex.mxmlc}" failonerror="true">
+      <arg line="${src.dir}/FlashCookies.as"/>
+      <arg line="-o ${dest.dir}/FlashCookies.swf"/>
+      <arg line="-static-link-runtime-shared-libraries=true"/>
+    </exec>
+  </target>
+</project>

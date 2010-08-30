@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+	<title>CStorage - agnostic javascript client side storage</title>
+	<script src="../javascripts/cstorage.js" type="text/javascript"></script>
+	<script src="../javascripts/swfobject.js" type="text/javascript"></script>
+</head>
+<body>
+
+<input id="value" type=text /><br/>
+<a href="#" onClick="WriteValue();">Write Value</a><br/>
+<a href="#" onClick="ReadValue();">Read Value</a><br/>
+
+<div id="FlashCookies">
+  Loading FlashCookies
+</div>
+<div id="Results">
+  Results
+</div>
+
+<script type="text/javascript">
+  
+  CStorage.configure();
+
+	function WriteValue() {
+	  CStorage.Put( "key", document.getElementById('value').value );
+    document.getElementById('Results').innerHTML = "Pushed value: " 
+      + document.getElementById('value').value + " to the storage";
+	};
+	
+	function ReadValue() {
+    var value = CStorage.Get( "key" );
+    document.getElementById('Results').innerHTML = "Readed value: " 
+      + value + " from the storage";
+	};
+
+	swfobject.embedSWF(
+		"../swfs/FlashCookies.swf?" + Math.random().toString(),
+		"FlashCookies",
+		"100",
+		"100",
+		"9",
+		"../swfs/expressInstall.swf",
+		{},
+		{
+			allowScriptAccess: "always",
+			wmode: "opaque",
+			bgcolor: "#00ff00"
+		},
+		{},
+		function() {
+			console.log("Loaded");
+		}
+	);
+
+</script>
+	
+</body>
+
+</html>

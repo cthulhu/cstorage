@@ -1,11 +1,6 @@
 #cstorage
 
 ##In development
-* Adaptor interface for alternative transports (WebSockets, Comet)
-* TLS Support
-* Examples
-* Documentation
-
 
 ##Getting Started
 
