@@ -1,4 +1,3 @@
-
 //simple inheritance helper
 function extend(superclass, constructor_extend, prototype) {
 	var res = function () {
@@ -68,7 +67,7 @@ var FlashInterface = extend(Dispatcher, function(){}, {
 	},
 	
 	Get: function( key ) {
-		return this.dispatch("Get", value );
+		return this.dispatch("Get", key );
 	},
 	
 	Put: function( key, value ) {
@@ -102,4 +101,11 @@ var FlashInterface = extend(Dispatcher, function(){}, {
 	}
 
 });
+
+function dalamas()
+{
+  alert("AAA");
+}
+
 var CStorage = new FlashInterface();
+
