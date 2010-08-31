@@ -60,6 +60,9 @@ Dispatcher.prototype = {
 var FlashInterface = extend(Dispatcher, function(){}, {
   
   buffer: [],
+	logger: null,
+	loglevel: 2,
+	
   element: "FlashCookies",
   
 	configure: function(settings) {
@@ -77,16 +80,32 @@ var FlashInterface = extend(Dispatcher, function(){}, {
 	//private
 	onLoad: function() {
 		this.api = document.getElementById( this.element );
-		this.fireEvent("load");
 		this.update();
-		alert("Loaded");
 	},
 
+	//private
+	onLogEntry: function(msg) {
+		if(this.logger && this.logger.log) {
+			this.logger.log( msg );
+		}
+	},
+	
+	//private
+	update: function() {
+		if(this.logger) {
+			this.dispatch("SetLogLevel", this.loglevel);
+		}
+		if(this.policyUrl) {
+			this.dispatch("LoadPolicy", this.policyUrl);
+		}
+	},
 
 	/// private
 	dispatch: function() {
-		if(this.api) {
+		if( this.api ) {
 			var args = [].slice.call(arguments);
+			if( this.logger && this.logger )
+			this.onLogEntry( "@dispatch " + args );
 			return this.api[args.shift()].apply(this.api, args);
 		} else {
 			this.buffer.push(arguments);
@@ -101,11 +120,6 @@ var FlashInterface = extend(Dispatcher, function(){}, {
 	}
 
 });
-
-function dalamas()
-{
-  alert("AAA");
-}
 
 var CStorage = new FlashInterface();
 

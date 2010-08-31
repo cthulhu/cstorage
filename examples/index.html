@@ -22,7 +22,10 @@
 
 <script type="text/javascript">
   
-  CStorage.configure();
+  CStorage.configure( { 
+    logger: console, 
+    loglevel: 2      // debug 
+  } );
 
 	function WriteValue() {
 	  CStorage.Put( "key", document.getElementById('value').value );
@@ -43,11 +46,11 @@
 		"600",
 		"9",
 		"../swfs/expressInstall.swf",
-		{},
+		{ storage_name:"AppStore" },
 		{
 			allowScriptAccess: "always",
 			wmode: "opaque",
-			bgcolor: "#00ff00"
+			bgcolor: "#aaaaaa"
 		},
 		{},
 		function() {

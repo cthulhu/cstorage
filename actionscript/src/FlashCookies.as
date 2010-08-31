@@ -4,9 +4,16 @@ package {
   import flash.events.Event;
   import flash.external.*;
   import flash.system.Security;
+  import flash.net.SharedObject;
+  import flash.net.SharedObjectFlushStatus;  
   
-  public class FlashCookies extends MovieClip {
-    private var output:TextField;
+  import org.ds.logging.LogEvent;
+  import org.ds.logging.Logger;  
+  
+  public class FlashCookies extends Sprite {
+    private var output    :TextField = new TextField();
+ 		private var logger		:Logger 	= new Logger();
+	  private var Storage   :SharedObject;
 
     // Construction
     public function FlashCookies() {
@@ -14,67 +21,62 @@ package {
       Security.allowInsecureDomain("*");
       
       ExternalInterface.marshallExceptions = true;
-      
-      // creating a new shape instance
-      var circle:Shape = new Shape( ); 
-      // starting color filling
-      circle.graphics.beginFill( 0xff9933 , 1 );
-      // drawing circle 
-      circle.graphics.drawCircle( 0 , 0 , 100 );
-      // repositioning shape
-      circle.x = 100;                                 
-      circle.y = 100;
-      
-      // adding displayobject to the display list
-      addChild( circle );
-      
-      output = new TextField();
       output.y = 25;
       output.width = 450;
       output.height = 325;
       output.multiline = true;
-      output.wordWrap = true;
-      output.border = true;
       output.text = "Initializing...\n";
       addChild(output);
 
       try {
         if( ExternalInterface.available ) {
-          ExternalInterface.addCallback( "IsAvailable", IsAvailable );
-          ExternalInterface.addCallback( "Get", Get );
-          ExternalInterface.addCallback( "Put", Put );
-          ExternalInterface.addCallback( "Delete", Delete );
+          ExternalInterface.addCallback( "IsAvailable", api_is_available );
+          ExternalInterface.addCallback( "Get",         api_get );
+          ExternalInterface.addCallback( "Put",         api_put );
+          ExternalInterface.addCallback( "Delete",      api_delete );
+          ExternalInterface.addCallback( "SetLogLevel", api_set_log_level );
+          ExternalInterface.addCallback( "LoadPolicy",  api_load_policy );
           ExternalInterface.call("CStorage.onLoad");
+          logger.addEventListener( LogEvent.ENTRY, onLogEntry );
+          Logger.log("Initialized ...");
         }
       } catch (error:SecurityError) {
           output.appendText("A SecurityError occurred: " + error.message + "\n");
       } catch (error:Error) {
           output.appendText("An Error occurred: " + error.message + "\n");
       }
-      var helloDisplay:TextField = new TextField();
-      helloDisplay.text = "Hello World";
-      addChild(helloDisplay);
     }
 
-    private function Put( key:String, value:String ):void{
+    private function api_put( key:String, value:String ):void{
       // Implement me
     }
     
-    private function Get( key:String ):String{
+    private function api_get( key:String ):String{
+      Logger.log( "@api_get key: " + key );
       return "The data"; // Implement me
     }
     
-    private function Delete( key:String ):void{
+    private function api_delete( key:String ):void{
+      Logger.log( "@api_delete key: " + key );
       // Implement me
     }
     
-    private function IsAvailable():Boolean {
+    private function api_is_available():Boolean {
       return true; // need to invent good method
     }
     
-    private function onLogEntry(e:String):void {
-       ExternalInterface.call("alert", e );
-    }        
+		private function api_set_log_level(lvl:uint):void {
+			Logger.level = lvl;
+		}
+		
+  	private function api_load_policy(url:String):void {
+			Logger.info("Loading Policy File");
+			Security.loadPolicyFile(url);
+		}
+    
+		private function onLogEntry(e:LogEvent):void {
+			ExternalInterface.call("CStorage.onLogEntry", e.toString());
+  	}
   }
   
 }
