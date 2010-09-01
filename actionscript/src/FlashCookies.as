@@ -12,8 +12,7 @@ package {
   
   public class FlashCookies extends Sprite {
     private var output    :TextField = new TextField();
- 		private var logger		:Logger 	= new Logger();
-	  private var Storage   :SharedObject;
+    private var logger    :Logger    = new Logger();
 
     // Construction
     public function FlashCookies() {
@@ -48,26 +47,31 @@ package {
     }
 
     private function api_put( key:String, value:String ):void{
-      // Implement me
+      Logger.log( "@api_put key: " + key + " value:" + value );
+      var storage:SharedObject = SharedObject.getLocal( key ,"/" );
+      storage.data.value = value;
+      storage.flush();
     }
     
     private function api_get( key:String ):String{
       Logger.log( "@api_get key: " + key );
-      return "The data"; // Implement me
+      var storage:SharedObject = SharedObject.getLocal( key ,"/" );
+      return storage.data.value;
     }
     
     private function api_delete( key:String ):void{
       Logger.log( "@api_delete key: " + key );
-      // Implement me
+      var storage:SharedObject = SharedObject.getLocal( key ,"/" );
+      storage.clear();
     }
     
     private function api_is_available():Boolean {
       return true; // need to invent good method
     }
     
-		private function api_set_log_level(lvl:uint):void {
-			Logger.level = lvl;
-		}
+	private function api_set_log_level(lvl:uint):void {
+		Logger.level = lvl;
+	}
 		
   	private function api_load_policy(url:String):void {
 			Logger.info("Loading Policy File");
