@@ -13,9 +13,6 @@
 <a href="#" onClick="WriteValue();">Write Value</a><br/>
 <a href="#" onClick="ReadValue();">Read Value</a><br/>
 
-<div id="FlashCookies">
-  Loading FlashCookies
-</div>
 <div id="Results">
   Results
 </div>
@@ -38,25 +35,6 @@
     document.getElementById('Results').innerHTML = "Readed value: " 
       + value + " from the storage";
 	};
-
-	swfobject.embedSWF(
-		"../swfs/FlashCookies.swf?" + Math.random().toString(),
-		"FlashCookies",
-		"800",
-		"600",
-		"9",
-		"../swfs/expressInstall.swf",
-		{ storage_name:"AppStore" },
-		{
-			allowScriptAccess: "always",
-			wmode: "opaque",
-			bgcolor: "#aaaaaa"
-		},
-		{},
-		function() {
-			console.log("Loaded");
-		}
-	);
 
 </script>
 	

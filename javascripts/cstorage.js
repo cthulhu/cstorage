@@ -67,6 +67,26 @@ var FlashInterface = extend(Dispatcher, function(){}, {
   
 	configure: function(settings) {
 		$extend(this, settings);
+		div = document.createElement('div');
+    div.id = this.element;
+    document.getElementsByTagName('body')[0].appendChild( div );
+    
+	  swfobject.embedSWF(
+		  "../swfs/FlashCookies.swf?" + Math.random().toString(),
+		  this.element,
+		  "10", "10", "9",
+		  "../swfs/expressInstall.swf",
+		  { storage_name:"AppStore" },
+		  {
+			  allowScriptAccess: "always",
+			  wmode: "opaque",
+			  bgcolor: "#aaaaaa"
+		  },
+		  {},
+		  function() {
+			  console.log("Loaded");
+		  }
+	  );    
 	},
 	
 	Get: function( key ) {
