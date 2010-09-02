@@ -62,7 +62,8 @@ var FlashInterface = extend(Dispatcher, function(){}, {
   buffer: [],
 	logger: null,
 	loglevel: 2,
-	
+	policyUrl: null,
+	api: null,
   element: "FlashCookies",
   
 	configure: function(settings) {
