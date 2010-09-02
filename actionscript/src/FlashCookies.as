@@ -11,8 +11,10 @@ package {
   import org.ds.logging.Logger;  
   
   public class FlashCookies extends Sprite {
-    private var output    :TextField = new TextField();
-    private var logger    :Logger    = new Logger();
+    private var output       :TextField = new TextField();
+    private var logger       :Logger    = new Logger();
+    private var current_date :Date      = new Date();
+    private static const millisecondsPerMinute:int = 1000 * 60; 
 
     // Construction
     public function FlashCookies() {
@@ -20,13 +22,7 @@ package {
       Security.allowInsecureDomain("*");
       
       ExternalInterface.marshallExceptions = true;
-      output.y = 25;
-      output.width = 450;
-      output.height = 325;
-      output.multiline = true;
-      output.text = "Initializing...\n";
-      addChild(output);
-
+      addChild( output );
       try {
         if( ExternalInterface.available ) {
           ExternalInterface.addCallback( "IsAvailable", api_is_available );
@@ -46,17 +42,23 @@ package {
       }
     }
 
-    private function api_put( key:String, value:String, expire_minutes:String ):void{
+    private function api_put( key:String, value:String, expire_minutes:uint ):void{
       Logger.log( "@api_put key: " + key + " value:" + value );
       var storage:SharedObject = SharedObject.getLocal( key ,"/" );
       storage.data.value = value;
+      storage.data.expired_at = expire_minutes * millisecondsPerMinute + current_date.getTime()  ;
       storage.flush();
     }
     
     private function api_get( key:String ):String{
       Logger.log( "@api_get key: " + key );
       var storage:SharedObject = SharedObject.getLocal( key ,"/" );
-      return storage.data.value;
+      if( current_date < storage.data.expired_at ) {
+        return storage.data.value;
+      }
+      else{
+        return "";
+      }
     }
     
     private function api_delete( key:String ):void{

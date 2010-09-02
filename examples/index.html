@@ -22,7 +22,7 @@
   CStorage.configure();
 
 	function WriteValue() {
-	  CStorage.Put( "key", document.getElementById('value').value, 10 );
+	  CStorage.Put( "key", document.getElementById('value').value, 5 );
     document.getElementById('Results').innerHTML = "Pushed value: " 
       + document.getElementById('value').value + " to the storage";
 	};
