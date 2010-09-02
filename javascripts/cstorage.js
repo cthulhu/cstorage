@@ -82,19 +82,47 @@ var FlashInterface = extend(Dispatcher, function(){}, {
 			  wmode: "opaque",
 			  bgcolor: "#aaaaaa"
 		  },
-		  {},
-		  function() {
-			  console.log("Loaded");
-		  }
+		  {}
 	  );    
 	},
 	
-	Get: function( key ) {
-		return this.dispatch("Get", key );
+	GetJsCookies: function( c_name ){
+      try
+      {
+          if( document.cookie.length > 0 )
+          {
+              c_start = document.cookie.indexOf( c_name + "=" );
+              if( c_start != -1 )
+              {
+                  c_start = c_start + c_name.length + 1;
+                  c_end = document.cookie.indexOf( ";", c_start );
+                  if( c_end==-1) c_end = document.cookie.length;
+                  return unescape( document.cookie.substring( c_start,c_end ) );
+              }
+          }
+      }catch(err){}
+      return "";
 	},
 	
-	Put: function( key, value ) {
-		this.dispatch("Put", key, value );
+	Get: function( key ) {
+	  flash_cookies = this.dispatch("Get", key );
+	  js_cookies = this.GetJsCookies( key );
+	  
+		return ( flash_cookies == "" || flash_cookies == undefined || 
+		  flash_cookies == null ) ? js_cookies : flash_cookies ;
+	},
+
+	SetJsCookies: function( c_name, value, expire_minutes ){
+      var exdate = new Date();
+      exdate.setDate( exdate.getDate() + expire_minutes );
+      document.cookie = c_name + "=" + escape( value ) 
+        + ( ( expire_minutes == null ) ? 
+        "" : ";expires=" + exdate.toGMTString( ) );
+	  
+	},
+	Put: function( key, value, expire_minutes ) {
+	  this.SetJsCookies( key, value, expire_minutes );
+		this.dispatch("Put", key, value, expire_minutes );
 	},
 	
 	//private

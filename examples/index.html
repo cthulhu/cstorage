@@ -19,13 +19,10 @@
 
 <script type="text/javascript">
   
-  CStorage.configure( { 
-    logger: console, 
-    loglevel: 2      // debug 
-  } );
+  CStorage.configure();
 
 	function WriteValue() {
-	  CStorage.Put( "key", document.getElementById('value').value );
+	  CStorage.Put( "key", document.getElementById('value').value, 10 );
     document.getElementById('Results').innerHTML = "Pushed value: " 
       + document.getElementById('value').value + " to the storage";
 	};

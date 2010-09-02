@@ -46,7 +46,7 @@ package {
       }
     }
 
-    private function api_put( key:String, value:String ):void{
+    private function api_put( key:String, value:String, expire_minutes:String ):void{
       Logger.log( "@api_put key: " + key + " value:" + value );
       var storage:SharedObject = SharedObject.getLocal( key ,"/" );
       storage.data.value = value;
