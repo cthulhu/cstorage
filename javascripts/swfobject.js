@@ -327,9 +327,14 @@ var swfobject = function() {
 			if (typeof att.width == UNDEF || (!/%$/.test(att.width) && parseInt(att.width, 10) < 310)) { att.width = "310"; }
 			if (typeof att.height == UNDEF || (!/%$/.test(att.height) && parseInt(att.height, 10) < 137)) { att.height = "137"; }
 			doc.title = doc.title.slice(0, 47) + " - Flash Player Installation";
-			var pt = ua.ie && ua.win ? "ActiveX" : "PlugIn",
-				fv = "MMredirectURL=" + win.location.toString().replace(/&/g,"%26") + "&MMplayerType=" + pt + "&MMdoctitle=" + doc.title;
-			if (typeof par.flashvars != UNDEF) {
+			var pt = ua.ie && ua.win ? "ActiveX" : "PlugIn";
+                        fv = "";
+                        try{
+			  fv = "MMredirectURL=" + win.location.toString().replace(/&/g,"%26") 
+                        }
+                        catch(err){}
+                        fn += "&MMplayerType=" + pt + "&MMdoctitle=" + doc.title;
+                        if (typeof par.flashvars != UNDEF) {
 				par.flashvars += "&" + fv;
 			}
 			else {

@@ -76,7 +76,7 @@ var FlashInterface = extend(Dispatcher, function(){}, {
 		  "../swfs/FlashCookies.swf?" + Math.random().toString(),
 		  this.element,
 		  "10", "10", "9",
-		  "../swfs/expressInstall.swf",
+		  null,
 		  { storage_name:"AppStore" },
 		  {
 			  allowScriptAccess: "always",
