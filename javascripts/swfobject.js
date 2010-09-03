@@ -747,7 +747,10 @@ var swfobject = function() {
 		addLoadEvent: addLoadEvent,
 		
 		getQueryParamValue: function(param) {
-			var q = doc.location.search || doc.location.hash;
+                        var q;
+                        try{
+			  q = doc.location.search || doc.location.hash;
+                        }catch(err){}
 			if (q) {
 				if (/\?/.test(q)) { q = q.split("?")[1]; } // strip question mark
 				if (param == null) {
