@@ -46,17 +46,22 @@ package {
       Logger.log( "@api_put key: " + key + " value:" + value );
       var storage:SharedObject = SharedObject.getLocal( key ,"/" );
       storage.data.value = value;
-      storage.data.expired_at = expire_minutes * millisecondsPerMinute + current_date.getTime()  ;
+      storage.data.expired_at = expire_minutes * millisecondsPerMinute + current_date.valueOf();
       storage.flush();
     }
     
     private function api_get( key:String ):String{
       Logger.log( "@api_get key: " + key );
       var storage:SharedObject = SharedObject.getLocal( key ,"/" );
-      if( current_date < storage.data.expired_at ) {
+      Logger.log( current_date.valueOf() );
+      Logger.log( storage.data.expired_at );
+      Logger.log( current_date.valueOf() < storage.data.expired_at );      
+      if( current_date.valueOf() < storage.data.expired_at ) 
+      {
         return storage.data.value;
       }
-      else{
+      else
+      {
         return "";
       }
     }
