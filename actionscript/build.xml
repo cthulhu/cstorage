@@ -1,8 +1,10 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <project name="FlashCookies" default="compile" basedir=".">
   <property name="flex.mxmlc" location="/opt/flex/bin/mxmlc" />
   <property name="dest.dir" value="../swfs" />
   <property name="src.dir" value="src" />
+  <property name="js.dir" value="../javascripts" />
+  <property name="jsmin" value="../tools/jsmin.rb" />
   <target name="init">
     <delete dir="${dest.dir}" />
     <mkdir dir="${dest.dir}" />
@@ -12,6 +14,19 @@
       <arg line="${src.dir}/FlashCookies.as"/>
       <arg line="-o ${dest.dir}/FlashCookies.swf"/>
       <arg line="-static-link-runtime-shared-libraries=true"/>
+    </exec>
+  </target>
+  <target name="js" depends="cstorage.js, swfobject.js" />
+  <target name="cstorage.js" >
+    <exec executable="ruby" failonerror="true">
+      <arg line="${jsmin}"/>
+      <arg line="&lt;cstorage_src.js > cstorage.js"/>
+    </exec>
+  </target>
+  <target name="swfobject.js" >
+    <exec executable="ruby" failonerror="true">
+      <arg line="${jsmin}"/>
+      <arg line="&lt;${js.dir}/swfobject_src.js > swfobject.js"/>
     </exec>
   </target>
 </project>

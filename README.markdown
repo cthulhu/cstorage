@@ -1,35 +1,34 @@
 #cstorage
 
+  A small javascript+flash mixed toolset for storing client side information. 
+  It uses brawser cookies and flash's SharedObject. 
+  Can be useful if you need to store client iformation even if cookies are disabled.
+
 ##In development
+  
+  * html5's storage
+  * silverlight's storage
 
 ##Getting Started
 
-Include "cstorage.js" in your document, along with embedding the swf.  I use "swfobject.js":
+  The main files are cstorage.js, swfobject.js and FlashCookies.swf.
+  The best approach to use the cstorage is:
+
+  Include in head section:
 
 	<script src="path/to/swfobject.js" type="text/javascript"></script>
 	<script src="path/to/cstorage.js" type="text/javascript"></script>
 
-  <div id="FlashCookies"></div>
+  On the page do:
+
   <script type="text/javascript">
-	// this is a recommended way of embedding the swf file
-	// although, you can use any method you like and the swf
-	// when loaded will allow the above code to run in order.
-	swfobject.embedSWF(
-		"../swfs/amqp.swf",
-		"FlashCookies",
-		"1", "1", "9",
-		"../swfs/expressInstall.swf",
-		{},
-		{
-			allowScriptAccess: "always",
-			wmode	: "opaque",
-			bgcolor	: "#ff0000"
-		},
-		{},
-		function() {
-			console.log("Loaded");
-		}		
-	);
+    CStorage.configure({});
+    CStorage.Put( "key", "Value", 1 ); // writes the value by key
+    CStorage.Get( "key" ); // reads the value by key
+    CStorage.Delete( "key" ); // removes the value by key
   </script>
 
-Full examples can be found in the test diretory
+More examples can be found in the examples directory.
+
+Copyright (c) 2010 Stanislav O. Pogrebnyak, released under the MIT license
+
