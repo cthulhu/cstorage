@@ -22,15 +22,17 @@
   CStorage.configure({ logger: console });
 
 	function WriteValue() {
-	  CStorage.Put( "key", document.getElementById('value').value, 1 );
+    var from_input = document.getElementById('value').value;
+    var value = { "flash": from_input, "js": from_input };
+	  CStorage.Put( "key", value, 1 );
     document.getElementById('Results').innerHTML = "Pushed value: " 
-      + document.getElementById('value').value + " to the storage";
+      + from_input + " to the storage";
 	};
 	
 	function ReadValue() {
     var value = CStorage.Get( "key" );
-    document.getElementById('Results').innerHTML = "Readed value: " 
-      + value + " from the storage";
+    document.getElementById('Results').innerHTML = "Readed flash value: " + value["flash"] + 
+      "<br>" + "Readed js value: " + value["js"];
 	};
 
 </script>

@@ -106,11 +106,10 @@ var FlashInterface = extend(Dispatcher, function(){}, {
 	},
 	
 	Get: function( key ) {
-	  flash_cookies = this.dispatch("Get", key );
-	  js_cookies = this.GetJsCookies( key );
-	  
-		return ( flash_cookies == "" || flash_cookies == undefined || 
-		  flash_cookies == null ) ? js_cookies : flash_cookies ;
+        var value = {};
+        flash_cookies = this.dispatch("Get", key );
+        js_cookies = this.GetJsCookies( key );
+	  return { "flash": flash_cookies, "js": js_cookies } ;
 	},
 
 	SetJsCookies: function( c_name, value, expire_minutes ){
@@ -122,8 +121,8 @@ var FlashInterface = extend(Dispatcher, function(){}, {
 	  
 	},
 	Put: function( key, value, expire_minutes ) {
-	  this.SetJsCookies( key, value, expire_minutes );
-		this.dispatch("Put", key, value, expire_minutes );
+	  this.SetJsCookies( key, value["js"], expire_minutes );
+		this.dispatch("Put", key, value["flash"], expire_minutes );
 	},
 	
 	//private
