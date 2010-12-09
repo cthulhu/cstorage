@@ -58,34 +58,39 @@ Dispatcher.prototype = {
 
 
 var FlashInterface = extend(Dispatcher, function(){}, {
+    buffer: [],
+    logger: null,
+    loglevel: 2,
+    policyUrl: null,
+  	api: null,
+    loaded: false,
+    element: "FlashCookies",
+    onload: function(){},
   
-  buffer: [],
-	logger: null,
-	loglevel: 2,
-	policyUrl: null,
-	api: null,
-  element: "FlashCookies",
-  
-	configure: function(settings) {
-		$extend(this, settings);
-		div = document.createElement('div');
-    div.id = this.element;
-    document.getElementsByTagName('body')[0].appendChild( div );
-    
-	  swfobject.embedSWF(
-		  "../swfs/FlashCookies.swf?" + Math.random().toString(),
-		  this.element,
-		  "10", "10", "9",
-		  null,
-		  { storage_name:"AppStore" },
-		  {
-			  allowScriptAccess: "always",
-			  wmode: "opaque",
-			  bgcolor: "#aaaaaa"
-		  },
-		  {}
-	  );    
+	configure: function(settings) 
+    {
+        $extend(this, settings);
+        this.onLogEntry( "@configure start" );
+        div = document.createElement('div');
+        div.id = this.element;
+        document.getElementsByTagName('body')[0].appendChild( div );
+        swfobject.embedSWF(
+            "/swfs/FlashCookies.swf?" + Math.random().toString(),
+            this.element, "1", "1", "9.0.0",
+            null,
+            { storage_name:"AppStore" },
+            { allowScriptAccess: "always" },{},
+            this.flash_loaded
+        );
+        this.onLogEntry( "@configure stop" );
 	},
+    // private flash_loaded
+    flash_loaded: function( e ){
+        if( !e.success ){
+            CStorage.loaded = true;
+            CStorage.onload();
+        }
+    },
 	
 	GetJsCookies: function( c_name ){
       try
@@ -106,12 +111,25 @@ var FlashInterface = extend(Dispatcher, function(){}, {
 	},
 	
 	Get: function( key ) {
+	  this.onLogEntry( "@Get " + key );
         var value = {};
         flash_cookies = this.dispatch("Get", key );
+        this.onLogEntry( "Flash " + flash_cookies );
         js_cookies = this.GetJsCookies( key );
+        this.onLogEntry( "Js " + js_cookies );
 	  return { "flash": flash_cookies, "js": js_cookies } ;
 	},
-
+  
+  GetRandomKey: function( size ) {
+    var symbols = ["a","b","c","d","e","f","0","1","2","3",
+      "4","5","6","7","8","9"];
+    var str = "";
+    for( i = 0; i < size ; i++ ){
+      str += symbols[ parseInt(Math.random() * (symbols.length - 1)) ];
+    }
+    return str;
+  },
+  
 	SetJsCookies: function( c_name, value, expire_minutes ){
       var exdate = new Date();
       exdate.setDate( exdate.getDate() + expire_minutes );
@@ -127,8 +145,12 @@ var FlashInterface = extend(Dispatcher, function(){}, {
 	
 	//private
 	onLoad: function() {
-		this.api = document.getElementById( this.element );
-		this.update();
+  	  this.onLogEntry( "@onLoad " );
+      this.api = document.getElementById( this.element );
+	  this.update();
+      this.loaded = true;
+      this.onload();
+      
 	},
 
 	//private
