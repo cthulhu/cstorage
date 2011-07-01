@@ -79,7 +79,7 @@ var FlashInterface = extend(Dispatcher, function(){}, {
             this.element, "1", "1", "9.0.0",
             null,
             { storage_name:"AppStore" },
-            { allowScriptAccess: "always" },{},
+            { allowScriptAccess: "always", wmode:"opaque" },{},
             this.flash_loaded
         );
         this.onLogEntry( "@configure stop" );
