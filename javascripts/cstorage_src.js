@@ -71,17 +71,25 @@ var FlashInterface = extend(Dispatcher, function(){}, {
     {
         $extend(this, settings);
         this.onLogEntry( "@configure start" );
-        div = document.createElement('div');
-        div.id = this.element;
-        document.getElementsByTagName('body')[0].appendChild( div );
-        swfobject.embedSWF(
-            "/swfs/FlashCookies.swf?" + Math.random().toString(),
-            this.element, "1", "1", "9.0.0",
-            null,
-            { storage_name:"AppStore" },
-            { allowScriptAccess: "always", wmode:"opaque" },{},
-            this.flash_loaded
-        );
+        // quirk mode of IE, doesnt support fash embedding that way
+        if( document.documentMode != undefined && document.documentMode == 5 )
+        {
+            this.loaded = true;
+            this.onload();
+        }
+        else{
+          div = document.createElement('div');
+          div.id = this.element;
+          document.getElementsByTagName('body')[0].appendChild( div );
+          swfobject.embedSWF(
+              "/swfs/FlashCookies.swf?" + Math.random().toString(),
+              this.element, "1", "1", "9.0.0",
+              null,
+              { storage_name:"AppStore" },
+              { allowScriptAccess: "always", wmode:"opaque" },{},
+              this.flash_loaded
+          );
+        }
         this.onLogEntry( "@configure stop" );
 	},
     // private flash_loaded
