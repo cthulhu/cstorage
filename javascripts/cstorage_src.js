@@ -110,13 +110,14 @@ var FlashInterface = extend(Dispatcher, function(){}, {
       return "";
 	},
 	
-	Get: function( key ) {
+        Get: function( key ) {
 	  this.onLogEntry( "@Get " + key );
-        var value = {};
-        flash_cookies = this.dispatch("Get", key );
-        this.onLogEntry( "Flash " + flash_cookies );
-        js_cookies = this.GetJsCookies( key );
-        this.onLogEntry( "Js " + js_cookies );
+          var value = {};
+          flash_cookies = this.dispatch("Get", key );
+          flash_cookies = flash_cookies == undefined || flash_cookies == null ? "" : flash_cookies;
+          this.onLogEntry( "Flash " + flash_cookies );
+          js_cookies = this.GetJsCookies( key );
+          this.onLogEntry( "Js " + js_cookies );
 	  return { "flash": flash_cookies, "js": js_cookies } ;
 	},
   
