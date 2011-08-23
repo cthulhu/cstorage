@@ -144,7 +144,7 @@ var FlashInterface = extend(Dispatcher, function(){}, {
       exdate.setDate( exdate.getDate() + expire_minutes );
       document.cookie = c_name + "=" + escape( value ) 
         + ( ( expire_minutes == null ) ? 
-        "" : ";expires=" + exdate.toGMTString( ) );
+        "" : ";expires=" + exdate.toGMTString( ) + "; path=/" );
 	  
 	},
 	Put: function( key, value, expire_minutes ) {
@@ -201,4 +201,3 @@ var FlashInterface = extend(Dispatcher, function(){}, {
 });
 
 var CStorage = new FlashInterface();
-
