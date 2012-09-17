@@ -7,7 +7,7 @@ Dispatcher.prototype={addListener:function(name,fn,scope){if(!this.listeners[nam
 this.listeners[name].push({fn:fn,scope:scope||window});},on:function(name,fn,scope){this.addListener(name,fn,scope);},fireEvent:function(){var args=[].slice.call(arguments);var name=args.shift();var calls=this.listeners[name];if(calls){for(var i=0;i<calls.length;i++){var c=calls[i];c.fn.apply(c.scope,args);}}}};var FlashInterface=extend(Dispatcher,function(){},{buffer:[],logger:null,loglevel:2,policyUrl:null,api:null,loaded:false,element:"FlashCookies",onload:function(){},configure:function(settings)
 {$extend(this,settings);this.onLogEntry("@configure start");if(document.documentMode!=undefined&&document.documentMode==5)
 {this.loaded=true;this.onload();}
-else{div=document.createElement('div');div.id=this.element;document.getElementsByTagName('body')[0].appendChild(div);swfobject.embedSWF("/swfs/FlashCookies.swf?"+Math.random().toString(),this.element,"1","1","9.0.0",null,{storage_name:"AppStore"},{allowScriptAccess:"always",wmode:"opaque"},{},this.flash_loaded);}
+else{div=document.createElement('div');div.id=this.element;document.getElementsByTagName('body')[0].appendChild(div);swfobject.embedSWF("/swfs/FlashCookies.swf?"+Math.random().toString(),this.element,"1","1","9.0.0",null,{storage_name:"AppStore"},{allowScriptAccess:"always"},{},this.flash_loaded);}
 this.onLogEntry("@configure stop");},flash_loaded:function(e){if(!e.success){CStorage.loaded=true;CStorage.onload();}},GetJsCookies:function(c_name){try
 {if(document.cookie.length>0)
 {c_start=document.cookie.indexOf(c_name+"=");if(c_start!=-1)
